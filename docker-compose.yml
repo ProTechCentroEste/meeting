@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: meeting_postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: meeting
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  grpc_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: meeting_grpc_server
+    ports:
+      - "50051:50051"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:

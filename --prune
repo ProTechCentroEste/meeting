@@ -1,0 +1,48 @@
+.
+├── --prune
+├── Dockerfile
+├── docker-compose.yml
+├── github.com
+│   └── ProTechCentroEste
+│       └── meeting
+│           └── proto
+│               ├── meeting.pb.go
+│               └── meeting_grpc.pb.go
+├── go.mod
+├── go.sum
+├── meeting-frontend
+│   ├── README.md
+│   ├── next-env.d.ts
+│   ├── next.config.mjs
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── postcss.config.mjs
+│   ├── public
+│   │   ├── next.svg
+│   │   └── vercel.svg
+│   ├── src
+│   │   ├── app
+│   │   │   ├── auth
+│   │   │   │   └── nextauth.ts
+│   │   │   ├── favicon.ico
+│   │   │   ├── globals.css
+│   │   │   ├── layout.tsx
+│   │   │   └── page.tsx
+│   │   ├── components
+│   │   │   ├── GeoLocation.tsx
+│   │   │   ├── PaypalButton.tsx
+│   │   │   └── VideoChat.tsx
+│   │   └── pages
+│   │       └── api
+│   │           └── location.ts
+│   ├── tailwind.config.js
+│   ├── tailwind.config.ts
+│   └── tsconfig.json
+├── proto
+│   └── meeting.proto
+├── server
+│   └── server.go
+└── structure.txt
+
+15 directories, 31 files
