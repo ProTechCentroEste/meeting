@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package meeting;
+
+option go_package = "github.com/ProTechCentroEste/meeting/proto;meeting";
+
+service MeetingService {
+  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc Chat (ChatRequest) returns (stream ChatResponse);
+  rpc SendMessage (ChatMessage) returns (ChatMessage);
+  rpc FindNearbyUsers (FindNearbyUsersRequest) returns (FindNearbyUsersResponse);
+}
+
+message LoginRequest {
+  string auth_provider = 1;  // e.g., Google, GitHub, Facebook, Telegram, WhatsApp
+  string token = 2;
+}
+
+message LoginResponse {
+  string user_id = 1;
+  bool success = 2;
+  string error = 3;
+}
+
+message ChatMessage {
+  string user = 1;
+  string message = 2;
+  int64 timestamp = 3;
+}
+
+message ChatRequest {
+  string user_id = 1;
+  string message = 2;
+}
+
+message ChatResponse {
+  string user_id = 1;
+  string message = 2;
+  int64 timestamp = 3;
+}
+
+message FindNearbyUsersRequest {
+  double latitude = 1;
+  double longitude = 2;
+  double radius = 3; // Radius in meters
+}
+
+message FindNearbyUsersResponse {
+  repeated User users = 1;
+}
+
+message User { // take data from auth provider
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+}
