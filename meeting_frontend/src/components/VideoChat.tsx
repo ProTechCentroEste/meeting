@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from 'react';
 import Peer from 'simple-peer';
 
@@ -14,7 +16,9 @@ const VideoChat = () => {
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
       }
-      peer.addStream(stream);
+      if (!peer.destroyed) {
+        peer.addStream(stream);
+      }
     });
 
     peer.on('stream', (stream) => {

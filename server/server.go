@@ -5,14 +5,13 @@ import (
 	"database/sql"
 	"log"
 	"net"
-	"os"
+	"time"
 
 	pb "github.com/ProTechCentroEste/meeting/proto"
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"google.golang.org/grpc"
 )
 
-// Server implementation
 type server struct {
 	pb.UnimplementedMeetingServiceServer
 	db *sql.DB
@@ -20,12 +19,37 @@ type server struct {
 
 func (s *server) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	// Implement authentication logic here
-	return &pb.LoginResponse{User_id: "12345", Success: true}, nil
+	return &pb.LoginResponse{UserId: "12345", Success: true}, nil
 }
 
 func (s *server) Chat(req *pb.ChatRequest, stream pb.MeetingService_ChatServer) error {
-	// Implement chat logic here
-	return nil
+	// Implement chat streaming logic here
+	for {
+		msg, err := stream.Recv()
+		if err != nil {
+			return err
+		}
+
+		// Process received message and send a response
+		response := &pb.ChatResponse{
+			UserId:    msg.UserId,
+			Message:   msg.Message,
+			Timestamp: time.Now().Unix(),
+		}
+
+		if err := stream.Send(response); err != nil {
+			return err
+		}
+	}
+}
+
+func (s *server) SendMessage(ctx context.Context, msg *pb.ChatMessage) (*pb.ChatMessage, error) {
+	// Implement send message logic here
+	return &pb.ChatMessage{
+		User:      msg.User,
+		Message:   msg.Message,
+		Timestamp: time.Now().Unix(),
+	}, nil
 }
 
 func (s *server) FindNearbyUsers(ctx context.Context, req *pb.FindNearbyUsersRequest) (*pb.FindNearbyUsersResponse, error) {
@@ -80,11 +104,7 @@ type User struct {
 }
 
 func main() {
-	connStr := os.Getenv("DATABASE_URL")
-	if connStr == "" {
-		log.Fatalf("DATABASE_URL environment variable not set")
-	}
-
+	connStr := "postgresql://username:password@localhost:5432/mydb"
 	db, err := sql.Open("pgx", connStr)
 	if err != nil {
 		log.Fatalf("failed to connect to the database: %v", err)
